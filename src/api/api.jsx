@@ -1,10 +1,11 @@
 const POKEAPI_URL = import.meta.env.VITE_POKEAPI_URL;
 
-export const getPokemonList = async () => {
-    const response = await fetch(`${POKEAPI_URL}/pokemon?limit=151`);
+export const getPokemonList = async (offset = 0, limit = 20) => {
+    const response = await fetch(`${POKEAPI_URL}/pokemon?offset=${offset}&limit=${limit}`);
     const data = await response.json();
     return data.results;
 };
+
 
 export const getPokemonDetails = async (pokemonId) => {
     const response = await fetch(`${POKEAPI_URL}/pokemon/${pokemonId}`);

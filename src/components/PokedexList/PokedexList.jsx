@@ -2,27 +2,40 @@ import React from "react";
 import { getPokemonList } from '../../api/api';
 import PokedexItem from '../PokedexItem/PokedexItem';
 
+import { useEffect, useState } from 'react';
 
 
 const PokedexList = () => {
-    const [pokemonList, setPokemonList] = React.useState([]);
+    const [pokemonList, setPokemonList] = useState([]);
+    const [offset, setOffset] = useState(0);
+    const limit = 20;
 
-    React.useEffect(() => {
-        const fetchPokemonList = async () => {
-            const data = await getPokemonList();
-            setPokemonList(data);
-        };
-        fetchPokemonList();
+    const loadMorePokemon = async () => {
+        const newPokemonList = await getPokemonList(offset, limit);
+        setPokemonList(prevPokemonList => [...prevPokemonList, ...newPokemonList]);
+        setOffset(prevOffset => prevOffset + limit);
+    };
+
+    useEffect(() => {
+        loadMorePokemon();
     }, []);
 
+    useEffect(() => {
+        const handleScroll = () => {
+            if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight) return;
+            loadMorePokemon();
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [offset, limit]);
+
     return (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div className="flex flex-wrap justify-center p-4">
             {pokemonList.map((pokemon, index) => (
                 <PokedexItem key={index} pokemon={pokemon} />
             ))}
         </div>
     );
-
 }
 
 export default PokedexList;
