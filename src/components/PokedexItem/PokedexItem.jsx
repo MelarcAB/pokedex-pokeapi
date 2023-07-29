@@ -59,7 +59,7 @@ const PokedexItem = ({ pokemon }) => {
         <div className="w-64 sm:w-72 lg:w-80 bg-red-600 mx-2 my-4 p-4 rounded-lg shadow-lg text-white flex flex-col items-center overflow-hidden">
             <div className="bg-red-700 w-full p-3 rounded-t-lg shadow-inner flex items-center justify-center">
                 <img
-                    className="w-10 h-10 object-cover mr-2"
+                    className="w-10 h-10 object-cover mr-2 animate-bounce animate-infinite"
                     src={pokemonDetails.sprites?.front_default}
                     alt={`${poke_name} sprite`}
                 />
